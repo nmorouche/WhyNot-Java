@@ -13,7 +13,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    Scene home, settings, statistics, connction;
+    Scene home, settings, statistics, connection;
+    Stage window;
 
     public static void main(String[] args) {
         launch(args);
@@ -21,27 +22,78 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage){
-        BorderPane homeBorderPane = new BorderPane();
-        createBorder(primaryStage, homeBorderPane);
-        home = new Scene(homeBorderPane, 1500, 900);
-        createHomeScene(primaryStage, home);
+        window = primaryStage;
+
+        //Création Scene settings
+        createSettingsScene();
 
 
-        BorderPane settignsBorderPane = new BorderPane();
-        createBorder(primaryStage, settignsBorderPane);
-        settings = new Scene(settignsBorderPane, 1500, 900);
+        //Création Scene statistics
+        createStatisticsScene();
 
+        //Création Scene connection
+        createConnectionScene();
 
-        BorderPane statisticsBorderPane = new BorderPane();
-        createBorder(primaryStage, statisticsBorderPane);
-        statistics = new Scene(statisticsBorderPane, 1500, 900);
+        //Création Scene home
+        createHomeScene();
 
-        BorderPane connctionBorderPane = new BorderPane();
-        createBorder(primaryStage, connctionBorderPane);
-        connction = new Scene(connctionBorderPane, 1500, 900);
+        window.getIcons().add(new Image("file:icon.png"));
+        window.setTitle("WhyNot - Interface d'administration");
+        home.getStylesheets().add("style.css");
+        window.setScene(home);
+        window.show();
+
     }
 
-    public void createBorder(Stage primaryStage, BorderPane borderPane){
+    public void createHomeScene(){
+        BorderPane homeBorderPane = new BorderPane();
+        createHomeBorder(window, homeBorderPane);
+        home = new Scene(homeBorderPane, 1500, 900);
+    }
+
+    private void createSettingsScene() {
+        BorderPane settingsBorderPane = new BorderPane();
+        createSettingsBorder(window, settingsBorderPane);
+        settings = new Scene(settingsBorderPane, 1500, 900);
+        settings.getStylesheets().add("style.css");
+    }
+
+    private void createStatisticsScene() {
+        BorderPane statisticsBorderPane = new BorderPane();
+        createStatisticsBorder(window, statisticsBorderPane);
+        statistics = new Scene(statisticsBorderPane, 1500, 900);
+        statistics.getStylesheets().add("style.css");
+    }
+
+    private void createConnectionScene() {
+        BorderPane connectionBorderPane = new BorderPane();
+        createConnectionBorder(window, connectionBorderPane);
+        connection = new Scene(connectionBorderPane, 1500, 900);
+        connection.getStylesheets().add("style.css");
+    }
+
+    public void createSettingsBorder(Stage stage, BorderPane borderPane){
+        HBox infoBox = addHBox();
+        VBox navBox = addVBox(stage);
+        borderPane.setTop(infoBox);
+        borderPane.setLeft(navBox);
+    }
+
+    public void createStatisticsBorder(Stage primaryStage, BorderPane borderPane){
+        HBox infoBox = addHBox();
+        VBox navBox = addVBox(primaryStage);
+        borderPane.setTop(infoBox);
+        borderPane.setLeft(navBox);
+    }
+
+    public void createConnectionBorder(Stage primaryStage, BorderPane borderPane){
+        HBox infoBox = addHBox();
+        VBox navBox = addVBox(primaryStage);
+        borderPane.setTop(infoBox);
+        borderPane.setLeft(navBox);
+    }
+
+    public void createHomeBorder(Stage primaryStage, BorderPane borderPane){
         HBox infoBox = addHBox();
         VBox navBox = addVBox(primaryStage);
         VBox background = addBackground();
@@ -50,13 +102,6 @@ public class Main extends Application {
         borderPane.setCenter(background);
     }
 
-    public void createHomeScene(Stage primaryStage, Scene scene){
-        primaryStage.getIcons().add(new Image("file:icon.png"));
-        primaryStage.setTitle("WhyNot - Interface d'administration");
-        scene.getStylesheets().add("style.css");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
 
     public HBox addHBox() {
         HBox hbox = new HBox();
@@ -67,12 +112,16 @@ public class Main extends Application {
     public VBox addVBox(Stage primaryStage) {
         VBox vbox = new VBox();
         vbox.setId("navBar");
+
         Button connectionBtn = new Button("Connection");
-        connectionBtn.setOnAction(e -> primaryStage.setScene(connction));
+        connectionBtn.setOnAction(e -> primaryStage.setScene(connection));
+
         Button statisticsBtn = new Button("Statistics");
-        connectionBtn.setOnAction(e -> primaryStage.setScene(statistics));
+        statisticsBtn.setOnAction(e -> primaryStage.setScene(statistics));
+
         Button settingsBtn = new Button("Settings");
-        connectionBtn.setOnAction(e -> primaryStage.setScene(settings));
+        settingsBtn.setOnAction(e -> primaryStage.setScene(settings));
+
         vbox.getChildren().addAll(connectionBtn, statisticsBtn, settingsBtn);
 
         return vbox;
