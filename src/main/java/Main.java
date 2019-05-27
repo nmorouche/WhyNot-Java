@@ -1,20 +1,23 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
 
 public class Main extends Application {
 
-	Scene home, settings, statistics, connection;
-	Stage window;
+	private Scene home, settings, statistics, connection;
+	private Stage window;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -36,7 +39,7 @@ public class Main extends Application {
 		//Création Scene home
 		createHomeScene();
 
-		window.getIcons().add(new Image("file:icon.png"));
+		window.getIcons().add(new Image("/images/icon.png"));
 		window.setTitle("WhyNot - Interface d'administration");
 
 		window.setScene(home);
@@ -44,11 +47,20 @@ public class Main extends Application {
 
 	}
 
-	public void createHomeScene(){
+	private void createHomeScene(){
 		BorderPane homeBorderPane = new BorderPane();
 		createHomeBorder(homeBorderPane);
 		home = new Scene(homeBorderPane, 1500, 900);
 		home.getStylesheets().add("/css/style.css");
+	}
+
+	private void createHomeBorder(BorderPane borderPane){
+		HBox infoBox = addInfoHBox();
+		VBox navBox = addNavVBox();
+		VBox background = addBackground();
+		borderPane.setTop(infoBox);
+		borderPane.setLeft(navBox);
+		borderPane.setCenter(background);
 	}
 
 	private void createSettingsScene() {
@@ -58,7 +70,7 @@ public class Main extends Application {
 		settings.getStylesheets().add("/css/style.css");
 	}
 
-	public void createSettingsBorder(BorderPane borderPane){
+	private void createSettingsBorder(BorderPane borderPane){
 		HBox chartsBox = addInfoHBox();
 		VBox navBox = addNavVBox();
 		VBox settingsVbox = addSettingsVbox();
@@ -67,7 +79,7 @@ public class Main extends Application {
 		borderPane.setCenter(settingsVbox);
 	}
 
-	public VBox addSettingsVbox(){
+	private VBox addSettingsVbox(){
 		VBox vbox = new VBox();
 
 		Label databaseUsernameLabel = new Label("DataBase username :");
@@ -93,7 +105,7 @@ public class Main extends Application {
 		return vbox;
 	}
 
-	public void TestConnection(String databaseUsernameTextField, String databasePasswordTextField,String databaseNameTextField,String databaseUrlTextField, String databasePortTextField){
+	private void TestConnection(String databaseUsernameTextField, String databasePasswordTextField,String databaseNameTextField,String databaseUrlTextField, String databasePortTextField){
 		Database database = new Database(databaseUsernameTextField, databasePasswordTextField, databaseNameTextField, databaseUrlTextField, databasePortTextField);
 		if(database.dbConnection(database) == null){
 			Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -119,7 +131,7 @@ public class Main extends Application {
 
 	}
 
-	public void createStatisticsBorder(BorderPane borderPane){
+	private void createStatisticsBorder(BorderPane borderPane){
 		VBox graphVBox = new VBox();
 		HBox graphHBox = addGraphHBox(graphVBox);
 		VBox navBox = addNavVBox();
@@ -128,7 +140,7 @@ public class Main extends Application {
 		borderPane.setCenter(graphVBox);
 	}
 
-	public HBox addGraphHBox(VBox graphVBox){
+	private HBox addGraphHBox(VBox graphVBox){
 		HBox hbox = new HBox();
 		hbox.setId("infoBar");
 		//Button parity = new Button("Parity");
@@ -137,7 +149,6 @@ public class Main extends Application {
 		connectionTime.setOnAction(e -> ConnectionTimeCharts(graphVBox));
 		Button parity = new Button("Parity");
 		parity.setOnAction(e -> ParityPieCharts(graphVBox));
-
 		hbox.getChildren().addAll(parity, connectionTime);
 		return hbox;
 	}
@@ -149,7 +160,7 @@ public class Main extends Application {
 		connection.getStylesheets().add("/css/style.css");
 	}
 
-	public void createConnectionBorder(BorderPane borderPane){
+	private void createConnectionBorder(BorderPane borderPane){
 		HBox infoBox = addInfoHBox();
 		VBox navBox = addNavVBox();
 		VBox connectionVBox = addConnectionVBox();
@@ -175,23 +186,13 @@ public class Main extends Application {
 		return vbox;
 	}
 
-	public void createHomeBorder(BorderPane borderPane){
-		HBox infoBox = addInfoHBox();
-		VBox navBox = addNavVBox();
-		VBox background = addBackground();
-		borderPane.setTop(infoBox);
-		borderPane.setLeft(navBox);
-		borderPane.setCenter(background);
-	}
-
-
-	public HBox addInfoHBox() {
+	private HBox addInfoHBox() {
 		HBox hbox = new HBox();
 		hbox.setId("infoBar");
 		return hbox;
 	}
 
-	public VBox addNavVBox() {
+	private VBox addNavVBox() {
 		VBox vbox = new VBox();
 		vbox.setId("navBar");
 
@@ -208,30 +209,34 @@ public class Main extends Application {
 
 		return vbox;
 	}
-	public VBox addBackground(){
+	private VBox addBackground(){
 		VBox vbox = new VBox();
 		vbox.setId("background");
 		return vbox;
 	}
 
-	public void ParityPieCharts(VBox graphVBox){
+	private void ParityPieCharts(VBox graphVBox){
+
 		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
 				new PieChart.Data("Homme", 54),
 				new PieChart.Data("Femme", 46));
 		final PieChart chart = new PieChart(pieChartData);
 		chart.setTitle("Répartition du nombres d'homme et de femme sur WhyNot");
+
 		graphVBox.getChildren().clear();
 		graphVBox.getChildren().add(chart);
 
 	}
 
-	public void ConnectionTimeCharts(VBox graphVBox){
+	private void ConnectionTimeCharts(VBox graphVBox){
 		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-				new PieChart.Data("TEST", 12),
-				new PieChart.Data("Femme", 88));
+				new PieChart.Data("TEST", 150),
+				new PieChart.Data("Femme", 50));
 		final PieChart chart = new PieChart(pieChartData);
-		chart.setTitle("Imported Fruits");
+		chart.setTitle("Connection Time");
+
 		graphVBox.getChildren().clear();
 		graphVBox.getChildren().add(chart);
+
 	}
 }

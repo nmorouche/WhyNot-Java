@@ -1,11 +1,14 @@
 #background{
-    -fx-image: "background.png";
-    -fx-background-color: cyan;
+    -fx-background-image: url("/images/background.png");
+    -fx-background-repeat: stretch;
+    -fx-background-position: center center;
+    -fx-background-color: grey;
 }
 
 #infoBar{
     -fx-padding: 50;
     -fx-background-color: #D34973;
+
 }
 
 #navBar{
@@ -28,4 +31,18 @@
 }
 .button Text {
     -fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.8) , 0, 0.0 , 0 , 1);
+}
+.button:hover{
+    -fx-background-color:
+            linear-gradient(from 0% 93% to 0% 100%, #D34973 0%, #D34973 100%),
+            cyan,
+            cyan,
+            radial-gradient(center 50% 50%, radius 100%, #D34973, #D34973);
+}
+.button:pressed{
+    -fx-background-color:
+            linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
+            grey,
+            grey,
+            radial-gradient(center 50% 50%, radius 100%, #ea7f4b, #c54e2c);
 }
