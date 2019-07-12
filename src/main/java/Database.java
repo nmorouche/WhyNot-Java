@@ -1,87 +1,147 @@
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+import com.mongodb.*;
+import javafx.scene.control.Alert;
 
-
-import javax.xml.crypto.Data;
-import java.util.Arrays;
+import java.net.UnknownHostException;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Optional;
 
 public class Database {
 
-	public String username;
-	public String password;
-	public String dbName;
-	public String dbUrl;
-	public String port;
+	public String url;
+	public String databaseName;
 
-	public Database(String username, String password, String dbName, String dbUrl, String port) {
-		this.username = username;
-		this.password = password;
-		this.dbName = dbName;
-		this.dbUrl = dbUrl;
-		this.port = port;
+	public Database(String url, String databaseName) {
+
+		this.url = url;
+		this.databaseName = databaseName;
+
 	}
 
-	public String getUsername() {
-		return username;
-	}
+	public boolean testConnection(){
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+		try {
 
-	public String getPassword() {
-		return password;
-	}
+			MongoClient mongoClient = new MongoClient(new MongoClientURI(this.url));
+			DB database = mongoClient.getDB(this.databaseName);
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getDbName() {
-		return dbName;
-	}
-
-	public void setDbName(String dbName) {
-		this.dbName = dbName;
-	}
-
-	public String getDbUrl() {
-		return dbUrl;
-	}
-
-	public void setDbUrl(String url) {
-		this.dbUrl = dbUrl;
-	}
-
-	public String getPort() {
-		return port;
-	}
-
-	public void setPort(String port) {
-		this.port = port;
-	}
-
-	public MongoClient dbConnection(Database db){
-		try{
-			System.out.println(db.dbUrl);
-			MongoClientURI uri = new MongoClientURI("mongodb+srv://" + db.username + ":" + db.password + "@" + db.dbUrl + "/test?retryWrites=true");
-			MongoClient mongoClient = new MongoClient(uri);
-			return mongoClient;
-		}catch (Exception e) {
+		} catch (UnknownHostException e) {
+			return false;
 		}
-		return null;
+
+		return true;
+	}
+
+	public int query(String collectionName, String key, String value) throws UnknownHostException {
+
+		int counter = 0;
+
+		MongoClient mongoClient = new MongoClient(new MongoClientURI(this.url));
+		DB database = mongoClient.getDB(this.databaseName);
+		DBCollection collection = database.getCollection(collectionName);
+
+		BasicDBObject query = new BasicDBObject();
+		query.put(key, value);
+
+		DBCursor cursor = collection.find(query);
+
+		while(cursor.hasNext()) {
+
+			counter++;
+			cursor.next();
+		}
+
+		return counter;
+	}
+
+	public double[] queryAge(String collectionName, String key) throws UnknownHostException {
+
+		int counterMan = 0;
+		int counterWoman = 0;
+		double[] averageAge = new double[3];
+
+		MongoClient mongoClient = new MongoClient(new MongoClientURI(this.url));
+		DB database = mongoClient.getDB(this.databaseName);
+		DBCollection collection = database.getCollection(collectionName);
+
+		DBCursor cursor = collection.find();
+
+		while(cursor.hasNext()) {
+			DateFormatter dateFormatter = new DateFormatter(cursor.next().get(key).toString());
+			if(cursor.next().get("sexe").toString().equals("Homme")){
+				averageAge[1] += dateFormatter.returnAgeFormStringDate();
+				counterMan++;
+
+			}else if(cursor.next().get("sexe").toString().equals("Femme")){
+				averageAge[2] += dateFormatter.returnAgeFormStringDate();
+				counterWoman++;
+			}
+			averageAge[0] += dateFormatter.returnAgeFormStringDate();
+		}
+
+		averageAge[0] /= (counterMan + counterWoman);
+		averageAge[1] /= counterMan;
+		averageAge[2] /= counterWoman;
+
+		return averageAge;
+	}
+
+	public String[][] queryEvent(String collectionName) throws UnknownHostException {
+
+		String[][] numberOfParticipantsPerEvent = new String[2][];
+		numberOfParticipantsPerEvent[0] = new String[50];
+		numberOfParticipantsPerEvent[1] = new String[50];
+
+		String idEvent;
+		int i = 0;
+
+		MongoClient mongoClient = new MongoClient(new MongoClientURI(this.url));
+		DB database = mongoClient.getDB(this.databaseName);
+		DBCollection collection = database.getCollection(collectionName);
+
+		DBCursor cursor = collection.find();
+
+		while(cursor.hasNext()) {
+
+			idEvent = cursor.next().get("_id").toString();
+			numberOfParticipantsPerEvent[0][i] = cursor.next().get("name").toString();
+
+			numberOfParticipantsPerEvent[1][i] = ""+ queryNumberOfParticipantOfEvent("register", idEvent);
+			i++;
+
+		}
+		return numberOfParticipantsPerEvent;
 
 	}
 
-  /*  public String dbQuery(Connection con, String statement) throws SQLException {
+	public int queryNumberOfParticipantOfEvent(String collectionName, String idEvent) throws UnknownHostException {
 
-        Statement stmt=con.createStatement();
-        ResultSet rs=stmt.executeQuery(statement);
-        while(rs.next())
-            System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));
+		int counter = 0;
+
+		MongoClient mongoClient = new MongoClient(new MongoClientURI(this.url));
+		DB database = mongoClient.getDB(this.databaseName);
+		DBCollection collection = database.getCollection(collectionName);
+
+		DBCursor cursor = collection.find();
+
+		while(cursor.hasNext()) {
+			counter++;
+			cursor.next();
+		}
+		return counter;
+	}
+	public Optional<DBObject> queryPasswordForAdminUsername(String collectionName, String adminEmail) throws UnknownHostException {
+
+		MongoClient mongoClient = new MongoClient(new MongoClientURI(this.url));
+		DB database = mongoClient.getDB(this.databaseName);
+		DBCollection collection = database.getCollection(collectionName);
+
+		BasicDBObject query = new BasicDBObject();
+		query.put("email", adminEmail);
+		DBObject doc = collection.findOne(query);
+
+		return Optional.ofNullable(doc);
 
 
-        return result;
-    }*/
-
+	}
 }
