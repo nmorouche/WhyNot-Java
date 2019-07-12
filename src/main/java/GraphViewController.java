@@ -102,7 +102,7 @@ public class GraphViewController implements Initializable {
 		try {
 			double[] averageAge = database.queryAge("users", "birthdate");
 
-			AverageAgePieCharts(averageAge);
+			AverageAgeBarCharts(averageAge);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -159,18 +159,26 @@ public class GraphViewController implements Initializable {
 
 	}
 
-	private void AverageAgePieCharts(double[] averageAge) {
+	private void AverageAgeBarCharts(double[] averageAge) {
 
-		Label averageAgeofMan = new Label();
-		averageAgeofMan.setText("Average age of man : " + (int)averageAge[1] + " years");
+		CategoryAxis xAxis = new CategoryAxis();
+		xAxis.setLabel("Event");
 
-		Label averageAgeofWoman = new Label();
-		averageAgeofWoman.setText("Average age of woman : " + (int)averageAge[2]  + " years");
+		NumberAxis yAxis = new NumberAxis();
+		yAxis.setLabel("Number of participant");
 
-		Label averageAgeofUser = new Label();
-		averageAgeofUser.setText("Average age of all user : " + (int)averageAge[0]  + " years");
+		XYChart.Series set1 = new XYChart.Series<>();
+
+		set1.getData().add(new XYChart.Data("Man", averageAge[1]));
+		set1.getData().add(new XYChart.Data("Woman", averageAge[2]));
+
+		set1.getData().add(new XYChart.Data("All", averageAge[0]));
+
+		BarChart<?, ?> AverageAgeBarChart = new BarChart<String, Number>(xAxis, yAxis);
+		AverageAgeBarChart.getData().addAll(set1);
+
 
 		graphVbox.getChildren().clear();
-		graphVbox.getChildren().addAll(averageAgeofMan, averageAgeofWoman, averageAgeofUser);
+		graphVbox.getChildren().add(AverageAgeBarChart);
 	}
 }
