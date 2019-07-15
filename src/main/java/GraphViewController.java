@@ -19,6 +19,8 @@ public class GraphViewController implements Initializable {
 
 	@FXML
 	public VBox graphVbox;
+	@FXML
+	public Label connectedLabel;
 
 	@FXML
 	public Button parityChart;
@@ -36,16 +38,25 @@ public class GraphViewController implements Initializable {
 
 
 
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
 		File file = new File("settings.txt");
+		File fileUsername = new File("username.txt");
+
 
 		try {
 			FileReader fileReader = new FileReader(file);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			dataBaseurl = bufferedReader.readLine().split("=")[1];
-			dataBaseName = bufferedReader.readLine().split("=")[1];;
+			dataBaseName = bufferedReader.readLine().split("=")[1];
+
+			FileReader fileLastnameReader = new FileReader(fileUsername);
+			BufferedReader bufferedReaderLastName = new BufferedReader(fileLastnameReader);
+
+			connectedLabel.setText("Connected as : "+ bufferedReaderLastName.readLine());
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -181,4 +192,5 @@ public class GraphViewController implements Initializable {
 		graphVbox.getChildren().clear();
 		graphVbox.getChildren().add(AverageAgeBarChart);
 	}
+
 }

@@ -12,6 +12,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.math.BigInteger;
 import java.security.*;
 
@@ -75,24 +76,16 @@ public class ConnectionController implements Initializable {
 
 
 	public void changeSceneToGraphViewSceneOnClickBtn(ActionEvent event) throws IOException, NoSuchAlgorithmException {
-		/**
-		 * Test de la connexion à la BDD avant de changer la Scene
-		 * Si
-		 *   connexion OKAY on passe
-		 * Sinon
-		 *   On affiche une alerte qui nous dis de revoir nos settings
-		 *
-		 *   Ensuite test si user exist/bon password
-		 */
 
 		File file = new File("settings.txt");
+
 
 		try {
 			FileReader fileReader = new FileReader(file);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			dataBaseurl = bufferedReader.readLine().split("=")[1];
 			dataBaseName = bufferedReader.readLine().split("=")[1];
-			;
+
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -102,22 +95,30 @@ public class ConnectionController implements Initializable {
 
 		if (database.testConnection()) {
 			String passwordForAdmin;
-			Optional<DBObject> resultFromQuery;
-			resultFromQuery = database.queryPasswordForAdminUsername("admin", emailEdt.getText());
+			Optional<DBObject> resultPasswordFromQuery;
+			resultPasswordFromQuery = database.queryFromAdminEmail("admin", emailEdt.getText());
 
-			if (resultFromQuery.isPresent()) {
-				passwordForAdmin = resultFromQuery.get().get("password").toString();
+			Optional<DBObject> resultUsernameFromQuery;
+			resultUsernameFromQuery = database.queryFromAdminEmail("admin", emailEdt.getText());
+			if(resultUsernameFromQuery.isPresent()){
+				FileWriter fw = new FileWriter("username.txt");
+				fw.write(resultUsernameFromQuery.get().get("lastname").toString()+ "\n");
+				fw.close();
+			}
+
+			if (resultPasswordFromQuery.isPresent()) {
+				passwordForAdmin = resultPasswordFromQuery.get().get("password").toString();
 
 					String hashPassword = MD5(passwordField.getText());
 
 				if (hashPassword.equals(passwordForAdmin)) {
 					Parent parentScene = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/GraphView.fxml")));
 
-					Scene settingsScene = new Scene(parentScene);
+					Scene graphScene = new Scene(parentScene);
 
 					Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-					window.setScene(settingsScene);
+					window.setScene(graphScene);
 					window.show();
 				}else{
 					Alert alert = new Alert(Alert.AlertType.WARNING);

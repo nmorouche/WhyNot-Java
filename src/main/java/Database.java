@@ -130,7 +130,8 @@ public class Database {
 		}
 		return counter;
 	}
-	public Optional<DBObject> queryPasswordForAdminUsername(String collectionName, String adminEmail) throws UnknownHostException {
+
+	public Optional<DBObject> queryFromAdminEmail(String collectionName, String adminEmail) throws UnknownHostException {
 
 		MongoClient mongoClient = new MongoClient(new MongoClientURI(this.url));
 		DB database = mongoClient.getDB(this.databaseName);
@@ -144,4 +145,5 @@ public class Database {
 
 
 	}
+
 }

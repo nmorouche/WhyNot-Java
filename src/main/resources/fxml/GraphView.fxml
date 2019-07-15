@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="471.0" prefWidth="652.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphViewController">
    <children>
-      <VBox layoutY="101.0" prefHeight="372.0" prefWidth="150.0" style="-fx-background-color: green;" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="101.0">
+      <VBox layoutY="101.0" prefHeight="372.0" prefWidth="150.0" style="-fx-background-color: #4555A1;" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="101.0">
          <children>
             <Button fx:id="parityChart" mnemonicParsing="false" prefWidth="150.0" text="Parity" textAlignment="CENTER">
                <VBox.margin>
@@ -45,13 +45,13 @@
                   <Image url="@../images/logo.png" />
                </image>
             </ImageView>
-            <Label text="Connected as : ">
+            <Label fx:id="connectedLabel" text="Connected as : ">
                <HBox.margin>
                   <Insets left="20.0" top="45.0" />
                </HBox.margin>
             </Label>
          </children>
       </HBox>
-      <VBox fx:id="graphVbox" layoutX="137.0" layoutY="100.0" prefHeight="372.0" prefWidth="502.0" style="-fx-background-color: pink;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
+      <VBox fx:id="graphVbox" layoutX="137.0" layoutY="100.0" prefHeight="372.0" prefWidth="502.0" style="-fx-background-color: #D34973;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
    </children>
 </AnchorPane>

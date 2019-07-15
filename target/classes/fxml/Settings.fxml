@@ -44,26 +44,7 @@
                   <Insets left="25.0" right="25.0" top="10.0" />
                </VBox.margin>
             </TextField>
-            <Label text="Username : ">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" top="20.0" />
-               </VBox.margin>
-            </Label>
-            <TextField fx:id="username">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" top="10.0" />
-               </VBox.margin>
-            </TextField>
-            <Label text="Password">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" top="20.0" />
-               </VBox.margin>
-            </Label>
-            <TextField fx:id="password" accessibleRole="PASSWORD_FIELD">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" top="10.0" />
-               </VBox.margin>
-            </TextField>
+
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Button fx:id="testSettingsBtn" mnemonicParsing="false" rotate="-39.8" text="Test Connection">
