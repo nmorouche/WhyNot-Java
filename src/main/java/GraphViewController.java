@@ -89,8 +89,8 @@ public class GraphViewController implements Initializable {
 	private void changeVboxToReportChartOnClickBtn(ActionEvent actionEvent) {
 
 		try {
-			int valueOfManReported = database.genericQuery("reports", "gender","Homme");
-			int valueOfWomanReported = database.genericQuery("reports", "gender","Femme");
+			int valueOfManReported = database.reportQuery("users", "gender","Homme");
+			int valueOfWomanReported = database.reportQuery("users","gender","Femme");
 			parityReportedPieCharts(valueOfManReported, valueOfWomanReported);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();

@@ -133,4 +133,25 @@ public class Database {
 
 	}
 
+	public int reportQuery(String collectionName, String key, String value) throws UnknownHostException {
+		int counter = 0;
+
+		MongoClient mongoClient = new MongoClient(new MongoClientURI(this.url));
+		DB database = mongoClient.getDB(this.databaseName);
+		DBCollection collection = database.getCollection(collectionName);
+
+		BasicDBObject query = new BasicDBObject();
+		query.put("reported", true);
+
+		DBCursor cursor = collection.find(query);
+
+		while(cursor.hasNext()) {
+			DBObject reported = cursor.next();
+			if(reported.get(key).toString().equals(value)) {
+				counter++;
+			}
+		}
+
+		return counter;
+	}
 }
