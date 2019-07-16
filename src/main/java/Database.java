@@ -32,7 +32,7 @@ public class Database {
 		return true;
 	}
 
-	public int query(String collectionName, String key, String value) throws UnknownHostException {
+	public int genericQuery(String collectionName, String key, String value) throws UnknownHostException {
 
 		int counter = 0;
 
@@ -67,12 +67,14 @@ public class Database {
 		DBCursor cursor = collection.find();
 
 		while(cursor.hasNext()) {
-			DateFormatter dateFormatter = new DateFormatter(cursor.next().get(key).toString());
-			if(cursor.next().get("sexe").toString().equals("Homme")){
+			DBObject users = cursor.next();
+			DateFormatter dateFormatter = new DateFormatter(users.get(key).toString());
+
+			if(users.get("gender").toString().equals("Homme")){
 				averageAge[1] += dateFormatter.returnAgeFormStringDate();
 				counterMan++;
 
-			}else if(cursor.next().get("sexe").toString().equals("Femme")){
+			}else if(users.get("gender").toString().equals("Femme")){
 				averageAge[2] += dateFormatter.returnAgeFormStringDate();
 				counterWoman++;
 			}
@@ -102,11 +104,12 @@ public class Database {
 		DBCursor cursor = collection.find();
 
 		while(cursor.hasNext()) {
+			DBObject event = cursor.next();
 
-			idEvent = cursor.next().get("_id").toString();
-			numberOfParticipantsPerEvent[0][i] = cursor.next().get("name").toString();
+			idEvent = event.get("_id").toString();
+			numberOfParticipantsPerEvent[0][i] = event.get("name").toString();
 
-			numberOfParticipantsPerEvent[1][i] = ""+ queryNumberOfParticipantOfEvent("register", idEvent);
+			numberOfParticipantsPerEvent[1][i] = ""+ genericQuery("register", "eventId",idEvent);
 			i++;
 
 		}
@@ -114,22 +117,6 @@ public class Database {
 
 	}
 
-	public int queryNumberOfParticipantOfEvent(String collectionName, String idEvent) throws UnknownHostException {
-
-		int counter = 0;
-
-		MongoClient mongoClient = new MongoClient(new MongoClientURI(this.url));
-		DB database = mongoClient.getDB(this.databaseName);
-		DBCollection collection = database.getCollection(collectionName);
-
-		DBCursor cursor = collection.find();
-
-		while(cursor.hasNext()) {
-			counter++;
-			cursor.next();
-		}
-		return counter;
-	}
 
 	public Optional<DBObject> queryFromAdminEmail(String collectionName, String adminEmail) throws UnknownHostException {
 

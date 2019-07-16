@@ -89,8 +89,8 @@ public class GraphViewController implements Initializable {
 	private void changeVboxToReportChartOnClickBtn(ActionEvent actionEvent) {
 
 		try {
-			int valueOfManReported = database.query("reports", "sexe","Homme");
-			int valueOfWomanReported = database.query("reports", "sexe","Femme");
+			int valueOfManReported = database.genericQuery("reports", "gender","Homme");
+			int valueOfWomanReported = database.genericQuery("reports", "gender","Femme");
 			parityReportedPieCharts(valueOfManReported, valueOfWomanReported);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -100,8 +100,8 @@ public class GraphViewController implements Initializable {
 
 	private void changeVboxToParityChartOnClickBtn(ActionEvent actionEvent){
 		try {
-			int valueOfMan = database.query("users", "sexe","Homme");
-			int valueOfWoman = database.query("users", "sexe","Femme");
+			int valueOfMan = database.genericQuery("users", "gender","Homme");
+			int valueOfWoman = database.genericQuery("users", "gender","Femme");
 			parityPieCharts(valueOfMan, valueOfWoman);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -149,8 +149,8 @@ public class GraphViewController implements Initializable {
 
 	private void parityPieCharts(int valueOfManReported, int ValueOfWomanReported){
 		ObservableList<PieChart.Data> pieChartReportedData = FXCollections.observableArrayList(
-				new PieChart.Data("Man Reported", valueOfManReported),
-				new PieChart.Data("Woman Reported", ValueOfWomanReported));
+				new PieChart.Data("Man", valueOfManReported),
+				new PieChart.Data("Woman", ValueOfWomanReported));
 		final PieChart chartReported = new PieChart(pieChartReportedData);
 		chartReported.setTitle("Parity Man/Woman");
 

@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="471.0" prefWidth="652.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphViewController">
    <children>
-      <VBox layoutY="101.0" prefHeight="372.0" prefWidth="150.0" style="-fx-background-color: #4555A1;" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="101.0">
+      <VBox layoutY="101.0" prefHeight="372.0" prefWidth="150.0" style="-fx-background-color: #4555A1;" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="100.0">
          <children>
             <Button fx:id="parityChart" mnemonicParsing="false" prefWidth="150.0" text="Parity" textAlignment="CENTER">
                <VBox.margin>
@@ -35,7 +35,7 @@
             </Button>
             </children>
       </VBox>
-      <HBox prefHeight="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox prefHeight="100.0" style="-fx-background-color: #1F2124;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
@@ -45,7 +45,7 @@
                   <Image url="@../images/logo.png" />
                </image>
             </ImageView>
-            <Label fx:id="connectedLabel" text="Connected as : ">
+            <Label fx:id="connectedLabel" style="-fx-text-fill: white;" text="Connected as : ">
                <HBox.margin>
                   <Insets left="20.0" top="45.0" />
                </HBox.margin>
