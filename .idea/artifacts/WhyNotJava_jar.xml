@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="WhyNotJava:jar">
+    <output-path>$PROJECT_DIR$/classes/artifacts/WhyNotJava_jar</output-path>
+    <root id="archive" name="WhyNotJava.jar">
+      <element id="module-output" name="WhyNotJava" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:${javafx.version}" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/2.12.3/mongo-java-driver-2.12.3.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

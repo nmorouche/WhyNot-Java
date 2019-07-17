@@ -173,10 +173,10 @@ public class GraphViewController implements Initializable {
 	private void AverageAgeBarCharts(double[] averageAge) {
 
 		CategoryAxis xAxis = new CategoryAxis();
-		xAxis.setLabel("Event");
+		xAxis.setLabel("gender");
 
 		NumberAxis yAxis = new NumberAxis();
-		yAxis.setLabel("Number of participant");
+		yAxis.setLabel("Average Age");
 
 		XYChart.Series set1 = new XYChart.Series<>();
 
